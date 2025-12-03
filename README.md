@@ -4,7 +4,7 @@
 
 The Seattle Food Equity Map is an interactive web application that reimagines how we understand food access in urban environments. Unlike traditional food desert mapping that focuses solely on proximity to supermarkets, our project introduces a critical dimension: economic accessibility. By classifying grocery stores into three price tiers—Budget ($), Mid-Range ($$), and Premium ($$$)—we reveal the hidden disparities that exist even in neighborhoods with ample physical store access.
 
-This project was developed by Group AB5 (Oscar Castillo, Chae Won Yoo, Nolawi Woldemariam, Paul Gia-Huy Lam, and Evelyn Kate Antonyuk) for GEOG 328 at the University of Washington.
+This project was developed by Group AB5 (Oscar Castillo, Chae Won Yoo, Nolawi Woldemariam, and Paul Gia-Huy Lam) for GEOG 328 at the University of Washington.
 
 ## Live Demo
 
