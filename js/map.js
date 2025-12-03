@@ -11,18 +11,14 @@ let activeFilters = ['Budget', 'Mid-Range', 'Premium'];
 let userLocation = null;
 let allStores = [];
 
-// Map initialization
 map.on('load', () => {
     loadAllLayers();
     setupEventListeners();
 });
 
-// Add navigation controls
 map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
-// Load all map layers
 function loadAllLayers() {
-    // Emergency food layer
     map.addSource('emergency-food', {
         type: 'geojson',
         data: '../assets/emergency_food.geojson'
@@ -74,7 +70,6 @@ function loadAllLayers() {
         });
     };
 
-    // Seattle neighborhoods layer
     map.addSource('seattle-neighborhoods', {
         type: 'geojson',
         data: '../assets/seattle_hoods.geojson'
@@ -98,13 +93,11 @@ function loadAllLayers() {
         }
     });
 
-    // Grocery stores layer
     map.addSource('grocery-stores', {
         type: 'geojson',
         data: '../assets/stores.geojson'
     });
 
-    // Load stores data for distance calculations
     fetch('../assets/stores.geojson')
         .then(response => response.json())
         .then(data => {
@@ -151,9 +144,8 @@ function loadAllLayers() {
     });
 }
 
-// Setup all event listeners
 function setupEventListeners() {
-    // Price tier filtering
+    
     document.getElementById('console')?.addEventListener('change', handlePriceFilter);
     
     const budgetCheckbox = document.getElementById('Budget');
@@ -166,7 +158,6 @@ function setupEventListeners() {
         }
     });
 
-    // Layer toggles
     const emergencyCheckbox = document.getElementById('show-emergency');
     const neighborhoodsCheckbox = document.getElementById('show-neighborhoods');
 
@@ -184,13 +175,11 @@ function setupEventListeners() {
         });
     }
 
-    // Location button
     const locateBtn = document.getElementById('locateBtn');
     if (locateBtn) {
         locateBtn.addEventListener('click', getUserLocation);
     }
 
-    // Panel toggle
     const togglePanel = document.getElementById('togglePanel');
     const controlPanel = document.getElementById('control-panel');
     if (togglePanel && controlPanel) {
@@ -200,7 +189,6 @@ function setupEventListeners() {
     }
 }
 
-// Handle price tier filtering
 function handlePriceFilter() {
     activeFilters = [];
     
@@ -227,7 +215,6 @@ function handlePriceFilter() {
     map.setFilter('store-points', filterExpression);
 }
 
-// Get user's location and find nearest stores
 function getUserLocation() {
     const statusDiv = document.getElementById('location-status');
     
@@ -245,7 +232,6 @@ function getUserLocation() {
                 lat: position.coords.latitude
             };
 
-            // Add user location marker
             if (map.getLayer('user-location')) {
                 map.removeLayer('user-location');
                 map.removeSource('user-location');
@@ -274,7 +260,6 @@ function getUserLocation() {
                 }
             });
 
-            // Fly to user location
             map.flyTo({
                 center: [userLocation.lng, userLocation.lat],
                 zoom: 13,
@@ -303,9 +288,8 @@ function getUserLocation() {
     );
 }
 
-// Calculate distance between two points using Haversine formula
 function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 3959; // Earth's radius in miles
+    const R = 3959;
     const dLat = toRad(lat2 - lat1);
     const dLon = toRad(lon2 - lon1);
     
@@ -323,13 +307,11 @@ function toRad(degrees) {
     return degrees * Math.PI / 180;
 }
 
-// Find and display nearest stores
 function findNearestStores() {
     if (!userLocation || allStores.length === 0) {
         return;
     }
 
-    // Calculate distances for all stores
     const storesWithDistance = allStores.map(store => {
         const coords = store.geometry.coordinates;
         const distance = calculateDistance(
@@ -345,16 +327,13 @@ function findNearestStores() {
         };
     });
 
-    // Sort by distance and get top 10
     const nearestStores = storesWithDistance
         .sort((a, b) => a.distance - b.distance)
         .slice(0, 10);
 
-    // Display the stores
     displayNearestStores(nearestStores);
 }
 
-// Display nearest stores in the panel
 function displayNearestStores(stores) {
     const container = document.getElementById('nearest-stores');
     if (!container) return;
@@ -374,7 +353,6 @@ function displayNearestStores(stores) {
             <div class="store-tier ${tierClass}">${priceTier}</div>
         `;
 
-        // Click to fly to store
         storeDiv.addEventListener('click', () => {
             const coords = store.geometry.coordinates;
             map.flyTo({
@@ -383,7 +361,6 @@ function displayNearestStores(stores) {
                 duration: 1500
             });
 
-            // Show popup
             new mapboxgl.Popup()
                 .setLngLat(coords)
                 .setHTML(`
@@ -399,7 +376,6 @@ function displayNearestStores(stores) {
     });
 }
 
-// Show status messages
 function showStatus(message, type) {
     const statusDiv = document.getElementById('location-status');
     if (!statusDiv) return;
